@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Typography } from '@mui/material';
 import SearchBar from './components/SearchBar';
-import Movies from './components/Movies';
+import MoviesList from './components/MoviesList';
 
 function App() {
     const [query, setQuery] = useState('');
@@ -12,7 +12,7 @@ function App() {
                 Movie explorer
             </Typography>
             <SearchBar query={query} setQuery={setQuery}></SearchBar>
-            <Movies query={query} />
+            <MoviesList query={query} />
         </Container>
     );
 }

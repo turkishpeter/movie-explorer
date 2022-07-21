@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Grid, CircularProgress } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { MOVIES } from '../utils/queries';
-import CardWrapper from './CardWrapper';
+import MovieItem from './MovieItem';
 
-const Movies = ({ query }) => {
+const MoviesList = ({ query }) => {
     const { loading, error, data } = useQuery(MOVIES, {
         variables: { name: query },
     });
@@ -20,7 +20,7 @@ const Movies = ({ query }) => {
             ) : (
                 <Grid container spacing={4}>
                     {data?.searchMovies?.map((movie) => (
-                        <CardWrapper key={movie.id} cardData={movie} />
+                        <MovieItem key={movie.id} movieData={movie} />
                     ))}
                 </Grid>
             )}
@@ -28,8 +28,8 @@ const Movies = ({ query }) => {
     );
 };
 
-Movies.propTypes = {
+MoviesList.propTypes = {
     query: PropTypes.string,
 };
 
-export default Movies;
+export default MoviesList;
