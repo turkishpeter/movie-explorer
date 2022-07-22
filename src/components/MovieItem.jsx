@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import MovieModal from './MovieModal';
 import { movieItemStyles } from '../utils/styleObjects';
-import { RELATED, STANDARD } from '../utils/constants';
+import { RELATED } from '../utils/constants';
 
 const MovieItem = ({ movieData, setQueryType, setRelatedMovies }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +22,6 @@ const MovieItem = ({ movieData, setQueryType, setRelatedMovies }) => {
         setRelatedMovies(relatedMovies);
     };
     const openModal = () => {
-        setQueryType(STANDARD);
         setIsOpen(true);
     };
     const { title, wrapper, content, details } = movieItemStyles;

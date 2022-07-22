@@ -42,3 +42,6 @@ export const RELATED_QUERY = {
 export const WIKIPEDIA = (query) => {
     return `https://en.wikipedia.org/w/api.php?action=query&list=search&prop=info&inprop=url&utf8=&format=json&origin=*&srlimit=1&srsearch=${query}`;
 };
+export const GOOGLE = (appid, seid, title) => {
+    return `https://www.googleapis.com/customsearch/v1?key=${appid}&cx=${seid}&num=1&q=${title}+imdb`;
+};
