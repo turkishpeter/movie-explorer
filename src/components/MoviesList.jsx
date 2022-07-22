@@ -1,30 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, CircularProgress } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useQuery } from '@apollo/client';
-import { MOVIES } from '../utils/queries';
+import { MOVIES_QUERY, RELATED_QUERY } from '../utils/queries';
 import MovieItem from './MovieItem';
+import Spinner from './Spinner';
+import { STANDARD, RELATED } from '../utils/constants';
 
 const MoviesList = ({ query }) => {
-    const { loading, error, data } = useQuery(MOVIES, {
-        variables: { name: query },
-    });
+    const [queryType, setQueryType] = useState(STANDARD);
+    const [relatedMovies, setRelatedMovies] = useState([]);
+
+    useEffect(() => {
+        setQueryType(STANDARD);
+    }, [query]);
+
+    const queryChooser = (type) => {
+        if (type === STANDARD) return MOVIES_QUERY.query;
+        if (type === RELATED) return RELATED_QUERY.query;
+    };
+
+    const keyChooser = (type) => {
+        if (type === STANDARD) return MOVIES_QUERY.keyName;
+        if (type === RELATED) return RELATED_QUERY.keyName;
+    };
+
+    const queryVariables = (type) => {
+        if (type === STANDARD) {
+            return {
+                variables: { name: query },
+            };
+        }
+        if (type === RELATED) {
+            return {
+                variables: { ids: relatedMovies },
+            };
+        }
+    };
+
+    const { loading, error, data } = useQuery(
+        queryChooser(queryType),
+        queryVariables(queryType)
+    );
+
+    if (!query)
+        return (
+            <Typography variant="h3" align="center">
+                Search for movies
+            </Typography>
+        );
+    if (loading) return <Spinner size={120} />;
+    if (error) return <Typography variant="h3">{error.message}</Typography>;
     return (
-        <>
-            {loading ? (
-                <Grid container alignItems="center">
-                    <Grid item container justifyContent="center" xs={12}>
-                        <CircularProgress size={80} />
-                    </Grid>
-                </Grid>
-            ) : (
-                <Grid container spacing={4}>
-                    {data?.searchMovies?.map((movie) => (
-                        <MovieItem key={movie.id} movieData={movie} />
-                    ))}
-                </Grid>
-            )}
-        </>
+        <Grid container spacing={4}>
+            {data[keyChooser(queryType)]?.map((movie) => (
+                <MovieItem
+                    key={movie.id}
+                    movieData={movie}
+                    setQueryType={setQueryType}
+                    setRelatedMovies={setRelatedMovies}
+                />
+            ))}
+        </Grid>
     );
 };
 
