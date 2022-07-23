@@ -3,6 +3,7 @@ export const handleMovieLinks = async (
     setLoading,
     setResults,
     setImdbResults,
+    setImdbError,
     endpoints,
     keys
 ) => {
@@ -12,6 +13,7 @@ export const handleMovieLinks = async (
         keys.GOOGLE_SE_ID,
         title
     );
+    setImdbError('');
     const responseWiki = await fetch(endpointWiki);
     if (!responseWiki.ok) {
         console.log(responseWiki.statusText);
@@ -19,8 +21,10 @@ export const handleMovieLinks = async (
     const json = await responseWiki.json();
     setResults(json.query.search);
     const responseGoogle = await fetch(endpointGoogle);
-    if (!responseWiki.ok) {
-        console.log(responseGoogle.statusText);
+    if (!responseGoogle.ok) {
+        setImdbError(
+            'Could not fetch imdb link. Please review the google api keys in apiKeys file!'
+        );
     }
     const googleJson = await responseGoogle.json();
     setLoading(false);

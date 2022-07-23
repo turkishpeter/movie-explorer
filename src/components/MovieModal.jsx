@@ -11,6 +11,7 @@ const MovieModal = ({ title, open, close }) => {
     const [results, setResults] = useState([]);
     const [imdbResults, setImdbResults] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [imdbError, setImdbError] = useState('');
     useEffect(() => {
         if (!open) return;
         handleMovieLinks(
@@ -18,6 +19,7 @@ const MovieModal = ({ title, open, close }) => {
             setLoading,
             setResults,
             setImdbResults,
+            setImdbError,
             { WIKIPEDIA, GOOGLE },
             { GOOGLE_APP_ID, GOOGLE_SE_ID }
         );
@@ -45,7 +47,6 @@ const MovieModal = ({ title, open, close }) => {
                     >
                         {title}
                     </Typography>
-
                     {loading ? (
                         <Spinner size={40} />
                     ) : (
@@ -65,13 +66,19 @@ const MovieModal = ({ title, open, close }) => {
                                 >
                                     Wikipedia
                                 </Button>
-                                <Button
-                                    variant="text"
-                                    href={imdbResults[0]?.link}
-                                    target="_blank"
-                                >
-                                    IMDB
-                                </Button>
+                                {imdbError ? (
+                                    <Typography color="error">
+                                        {imdbError}
+                                    </Typography>
+                                ) : (
+                                    <Button
+                                        variant="text"
+                                        href={imdbResults[0]?.link}
+                                        target="_blank"
+                                    >
+                                        IMDB
+                                    </Button>
+                                )}
                             </div>
                         ))
                     )}
