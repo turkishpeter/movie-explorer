@@ -17,7 +17,7 @@ const MovieItem = ({ movieData, setQueryType, setRelatedMovies }) => {
     const [isOpen, setIsOpen] = useState(false);
     const relatedMovies = movieData.similar.map((movie) => movie.id);
 
-    const handleRelatedMovies = (related) => {
+    const handleRelatedMovies = () => {
         setQueryType(RELATED);
         setRelatedMovies(relatedMovies);
     };

@@ -4,6 +4,7 @@ import { Box, Typography, Modal, Button } from '@mui/material';
 import Spinner from './Spinner';
 import { WIKIPEDIA, GOOGLE } from '../utils/queries';
 import { GOOGLE_APP_ID, GOOGLE_SE_ID } from '../utils/apiKeys';
+import { handleMovieLinks } from '../services/movieLinks';
 import { movieModalStyles } from '../utils/styleObjects';
 
 const MovieModal = ({ title, open, close }) => {
@@ -12,28 +13,17 @@ const MovieModal = ({ title, open, close }) => {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         if (!open) return;
-        handleSearch();
+        handleMovieLinks(
+            title,
+            setLoading,
+            setResults,
+            setImdbResults,
+            { WIKIPEDIA, GOOGLE },
+            { GOOGLE_APP_ID, GOOGLE_SE_ID }
+        );
     }, [open]);
 
     const { wrapper, summary } = movieModalStyles;
-
-    const handleSearch = async () => {
-        const endpointWiki = WIKIPEDIA(title);
-        const endpointGoogle = GOOGLE(GOOGLE_APP_ID, GOOGLE_SE_ID, title);
-        const responseWiki = await fetch(endpointWiki);
-        if (!responseWiki.ok) {
-            console.log(responseWiki.statusText);
-        }
-        const json = await responseWiki.json();
-        setLoading(false);
-        setResults(json.query.search);
-        const responseGoogle = await fetch(endpointGoogle);
-        if (!responseWiki.ok) {
-            console.log(responseGoogle.statusText);
-        }
-        const googleJson = await responseGoogle.json();
-        setImdbResults(googleJson.items);
-    };
 
     const createSummary = (result) => {
         return { __html: result };

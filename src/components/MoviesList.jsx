@@ -9,7 +9,7 @@ import { STANDARD, RELATED } from '../utils/constants';
 
 const MoviesList = ({ query }) => {
     const [queryType, setQueryType] = useState(STANDARD);
-    const [relatedMovies, setRelatedMovies] = useState([]);
+    const [relatedMovies, setRelatedMovies] = useState(null);
 
     useEffect(() => {
         setQueryType(STANDARD);
@@ -53,6 +53,11 @@ const MoviesList = ({ query }) => {
     if (error) return <Typography variant="h3">{error.message}</Typography>;
     return (
         <Grid container spacing={4}>
+            {relatedMovies?.length === 0 && queryType === RELATED && (
+                <Typography variant="h3" align="center">
+                    This title does not have any related items
+                </Typography>
+            )}
             {data[keyChooser(queryType)]?.map((movie) => (
                 <MovieItem
                     key={movie.id}
