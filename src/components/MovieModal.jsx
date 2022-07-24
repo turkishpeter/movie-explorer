@@ -71,13 +71,16 @@ const MovieModal = ({ title, open, close }) => {
                                         {imdbError}
                                     </Typography>
                                 ) : (
-                                    <Button
-                                        variant="text"
-                                        href={imdbResults[0]?.link}
-                                        target="_blank"
-                                    >
-                                        IMDB
-                                    </Button>
+                                    imdbResults.map((result) => (
+                                        <Button
+                                            key={result.link}
+                                            variant="text"
+                                            href={result.link}
+                                            target="_blank"
+                                        >
+                                            IMDB
+                                        </Button>
+                                    ))
                                 )}
                             </div>
                         ))
